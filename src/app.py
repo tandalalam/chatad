@@ -9,7 +9,8 @@ import pandas as pd
 import json
 import numpy as np
 
-os.mkdir('logs/')
+if not os.path.exists('logs/'):
+    os.mkdir('logs/')
 logging.basicConfig(filename='logs/app.log', encoding='utf-8', level=logging.DEBUG)
 app = Flask(__name__)
 
