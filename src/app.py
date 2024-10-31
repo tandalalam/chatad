@@ -6,8 +6,9 @@ from configs.configs import ConfigManager
 import pandas as pd
 import json
 import numpy as np
-app = Flask(__name__)
 
+logging.basicConfig(filename='app.log', encoding='utf-8', level=logging.DEBUG)
+app = Flask(__name__)
 
 docs = pd.read_csv('files/ads_detail_embedding.csv')
 docs['embedding'] = docs['embedding'].apply(lambda x: np.array(json.loads(x)))
@@ -58,5 +59,10 @@ def is_healthy():
 
 
 if __name__ == '__main__':
-    port=ConfigManager.get_config_manager().get_prop('service_configs').get('port')
-    app.run(port=port)
+    port = ConfigManager.get_config_manager().get_prop('service_configs').get('port')
+    from waitress import serve
+
+    logging.info('Starting metric server.')
+    serve(app, host='0.0.0.0',
+          port=port,
+          threads=5)
