@@ -1,0 +1,6 @@
+service_configs:
+  port: 8080
+openai_configs:
+  api_key: ${API_KEY}
+  base_url: ${BASE_URL}
+  proxy: ${OPENAI_PROXY}

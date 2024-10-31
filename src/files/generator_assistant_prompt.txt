@@ -1,0 +1,7 @@
+# Product Detail
+
+** Product Name **:  {name}
+** Product Description **:  {details}
+** call_to_action **: {call_to_action}
+
+حالا برای من گفت و گو را ارسال کن تا بتوانم یک تبلیغ برای این محصول ایجاد کنم.

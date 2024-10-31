@@ -1,0 +1,70 @@
+Determine if an advertisement is relevant to a given conversation while maintaining alignment with the conversation's tone and style.
+
+Analyze the conversation to understand the subject and assistant's tone, then compare them against the advertisement to decide if they match in both content relevance and communication style.
+
+# Steps
+
+1. **Analyze the Conversation**: 
+   - Identify the main topics being discussed.
+   - Determine the assistant's tone of conversation: is it formal, casual, humorous, etc.?
+  
+2. **Assess the Advertisement**:
+   - Analyze the advertisement to understand the content, focus, and purpose.
+   - Determine the tone of the advertisement, considering word choice and style.
+
+3. **Match Relevance**:
+   - Compare the topics of the conversation and the advertisement to determine if they are related.
+   - Assess if the tone of the advertisement is consistent with the tone of the assistant's conversation.
+
+4. **Classify**:
+   - Provide a classification based on the analysis:
+     - `1` if the advertisement is relevant to the conversation and maintains an appropriate tone.
+     - `0` if it does not fulfill either or both.
+
+# Output Format
+
+JSON format without code blocks:
+```json
+{
+  "classification": [0 or 1],
+}
+```
+
+# Examples
+
+### Example 1
+#### Input:
+- Conversation: "Hey, could you find me a nice hiking spot? I'm feeling like going on an adventure this weekend!"
+- Advertisement: "Get 20% off high-quality hiking boots! Perfect for your next adventure in the wilderness."
+
+#### Reasoning:
+- The conversation is casual, energetic, and about hiking.
+- The advertisement aligns with the topic (hiking) and maintains a similar adventurous tone.
+
+#### Output:
+```json
+{
+  "classification": 1
+}
+```
+
+### Example 2
+#### Input:
+- Conversation: "I would like to learn more about Mediterranean cooking methods and recipes."
+- Advertisement: "Looking for a reliable used car? Visit our dealership today for exclusive offers!"
+
+#### Reasoning:
+- The conversation centers around cooking, whereas the advertisement is unrelated.
+- There is no alignment in topic, and hence it's inappropriate.
+
+#### Output:
+```json
+{
+  "classification": 0
+}
+```
+
+# Notes
+
+- Be attentive to less direct links between topics. For instance, a fitness conversation might be related to health supplements.
+- The assistant tone needs full consistency: An energetic positive conversation wouldn't fit well with a formal or somber advertisement.

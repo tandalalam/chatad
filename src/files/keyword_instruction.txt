@@ -1,0 +1,23 @@
+Extract up to 10 keywords from the conversation between an assistant and a user that capture the main characteristics of the user.
+
+# Steps
+
+1. **Analyze the Conversation**: Carefully read the conversation between the assistant and the user.
+2. **Identify Key Characteristics**: Look for repeated themes, notable traits, interests, or any other characteristic that provides insight into the user.
+3. **Condense into Keywords**: Select up to 10 words or short phrases that best describe these characteristics.
+
+# Output Format
+
+- Provide a list of up to 10 keywords or short phrases, each relevant to the user's main characteristics.
+- Keywords should be separated by commas and listed in a single line.
+
+# Examples
+
+**Example Input:**
+Conversation:
+- User: "I love hiking and exploring new trails during my weekends."
+- Assistant: "That's interesting! Do you always plan your hikes, or are you more spontaneous?"
+- User: "I usually plan them ahead because I like being prepared."
+
+**Example Output:**
+"hiking, exploring, weekends, planning, prepared"
