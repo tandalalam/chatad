@@ -1,4 +1,6 @@
 import logging
+import os
+
 from flask import Flask, request, jsonify
 from controllers.openai_helper import OpenAIHelper
 from controllers.ad_controller import AdController
@@ -7,7 +9,8 @@ import pandas as pd
 import json
 import numpy as np
 
-logging.basicConfig(filename='app.log', encoding='utf-8', level=logging.DEBUG)
+os.mkdir('logs/')
+logging.basicConfig(filename='logs/app.log', encoding='utf-8', level=logging.DEBUG)
 app = Flask(__name__)
 
 docs = pd.read_csv('files/ads_detail_embedding.csv')
