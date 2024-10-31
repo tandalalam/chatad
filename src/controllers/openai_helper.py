@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Dict, List
 import re
 import httpx
@@ -61,9 +62,11 @@ class OpenAIHelper:
             ]
         }
         data['messages'].append({"role": "user", "content": str(conversation)})
-        return self.client.chat.completions.create(
+        keywords = self.client.chat.completions.create(
             **data
         ).choices[0].message.content
+        logging.debug(keywords)
+        return keywords
 
     def create_advertising_content(self, conversation, url, aff_link, name, details, call_to_action, image_url=None):
         """
@@ -113,6 +116,7 @@ class OpenAIHelper:
             raise KeyError()
 
         conversational_ad_content = function_args['conversational_ad']
+        logging.debug(conversational_ad_content)
         return conversational_ad_content, response_message
 
     def is_conversation_related(self, conversation, advertisement):
@@ -141,5 +145,6 @@ class OpenAIHelper:
             "response_format": {"type": "json_object"}
         }
         response = self.client.chat.completions.create(**data).choices[0].message.content
+        logging.debug(response)
         regex = r'\{\n?  \"classification\": (\d)\n?\}'
         return int(re.match(regex, response).group(1))
