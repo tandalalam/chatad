@@ -1,4 +1,4 @@
-from src.controllers.openai_helper import OpenAIHelper
+from controllers.openai_helper import OpenAIHelper
 
 
 class AdController:

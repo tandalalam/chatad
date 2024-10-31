@@ -1,5 +1,4 @@
 import logging
-
 from flask import Flask, request, jsonify
 from controllers.openai_helper import OpenAIHelper
 from controllers.ad_controller import AdController
