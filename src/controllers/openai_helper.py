@@ -32,8 +32,10 @@ class OpenAIHelper:
                          keys=list(instructions.keys()))
         self.models = models
         openai_configs = {k: v for k, v in openai_configs.items() if v is not None}
-        http_client = httpx.Client(proxies=openai_configs['proxy']) if 'proxy' in openai_configs else None
-        del openai_configs['proxy']
+        http_client=None
+        if 'proxy' in openai_configs:
+            http_client = httpx.Client(proxies=openai_configs['proxy'])
+            del openai_configs['proxy']
         self.client = OpenAI(**openai_configs, http_client=http_client)
 
     def search_advertisements(self, docs, query, n=3):
