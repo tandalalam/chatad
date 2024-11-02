@@ -27,17 +27,18 @@ def check_must_haves(must_have_list: List, keys: List):
 class OpenAIHelper:
     create_ad = plugins['create_ad']
 
-    def __init__(self, openai_configs, instructions: Dict, models: Dict):
+    def __init__(self, openai_configs, metis_configs, instructions: Dict, models: Dict):
         self.instructions = instructions
         check_must_haves(must_have_list=MUST_HAVE_INSTRUCTIONS,
                          keys=list(instructions.keys()))
         self.models = models
         openai_configs = {k: v for k, v in openai_configs.items() if v is not None}
-        http_client=None
+        http_client = None
         if 'proxy' in openai_configs:
             http_client = httpx.Client(proxies=openai_configs['proxy'])
             del openai_configs['proxy']
-        self.client = OpenAI(**openai_configs, http_client=http_client)
+        self.metis_client = OpenAI(**metis_configs)
+        self.openai_client = OpenAI(**openai_configs, http_client=http_client)
 
     def search_advertisements(self, docs, query, n=3):
         df = docs.copy()
@@ -49,7 +50,7 @@ class OpenAIHelper:
 
     def get_embedding(self, text, model="text-embedding-3-large"):
         text = text.replace("\n", " ")
-        return self.client.embeddings.create(input=[text], model=model).data[0].embedding
+        return self.openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
     def get_keywords_from_conversation(self, conversation):
         data = {
@@ -62,7 +63,7 @@ class OpenAIHelper:
             ]
         }
         data['messages'].append({"role": "user", "content": str(conversation)})
-        keywords = self.client.chat.completions.create(
+        keywords = self.metis_client.chat.completions.create(
             **data
         ).choices[0].message.content
         logging.info(keywords)
@@ -98,16 +99,16 @@ class OpenAIHelper:
                 }
             ],
             "temperature": 0.5,
-            "functions": [self.create_ad.get_spec()],
-            "function_call": {"name": self.create_ad.get_name()}
+            "tools": [self.create_ad.get_spec()],
+            "function_call": {"type": "function", "function": {"name": "create_ad"}}
         }
 
-        resp = self.client.chat.completions.create(
+        resp = self.metis_client.chat.completions.create(
             **data
         ).choices[0].message
 
-        if dict(resp).get('function_call'):
-            function_args = json.loads(resp.function_call.arguments)
+        if dict(resp).get('tool_calls'):
+            function_args = json.loads(resp.tool_calls[0].function.arguments)
             function_args['url'] = url
             function_args['image_url'] = image_url
             function_args['aff_link'] = aff_link
@@ -144,7 +145,7 @@ class OpenAIHelper:
             "temperature": 0.5,
             "response_format": {"type": "json_object"}
         }
-        response = self.client.chat.completions.create(**data).choices[0].message.content
+        response = self.metis_client.chat.completions.create(**data).choices[0].message.content
         logging.info(response)
         regex = r'\{\n?  \"classification\": (\d)\n?\}'
         return int(re.match(regex, response).group(1))

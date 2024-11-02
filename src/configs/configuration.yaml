@@ -1,6 +1,8 @@
 service_configs:
   port: 8080
-openai_configs:
-  api_key: ${API_KEY}
+metis_configs:
+  api_key: ${METIS_API_KEY}
   base_url: ${BASE_URL}
+openai_configs:
+  api_key: ${OPENAI_API_KEY}
   proxy: ${OPENAI_PROXY}

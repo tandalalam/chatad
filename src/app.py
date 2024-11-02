@@ -20,6 +20,7 @@ docs = pd.read_csv('files/ads_detail_embedding.csv')
 docs['embedding'] = docs['embedding'].apply(lambda x: np.array(json.loads(x)))
 
 openai_configs = ConfigManager.get_config_manager().get_prop('openai_configs')
+metis_configs = ConfigManager.get_config_manager().get_prop('metis_configs')
 
 instructions = dict(
     keywords_from_conversation_instruction=open('files/keyword_instruction.txt').read(),
@@ -29,13 +30,14 @@ instructions = dict(
 )
 
 models = dict(
-    binary_classification_model='gpt-3.5-turbo',
-    keywords_from_conversation_model='gpt-3.5-turbo',
-    advertising_content_model='gpt-3.5-turbo',
+    binary_classification_model='gpt-3.5-turbo-0125',
+    keywords_from_conversation_model='gpt-3.5-turbo-0125',
+    advertising_content_model='gpt-3.5-turbo-0125',
     embedding_model='text-embedding-3-large',
 )
 
 openai_helper = OpenAIHelper(openai_configs=openai_configs,
+                             metis_configs=metis_configs,
                              instructions=instructions,
                              models=models, )
 ad_controller = AdController(docs=docs,

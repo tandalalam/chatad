@@ -17,25 +17,28 @@ class CreateAd:
 
     def get_spec(self):
         return {
-            "name": "create_ad",
-            "description": "Put the advertisement in proper format",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "conversational_ad": {
-                        "type": "string",
-                        "description": "The advertising content that is created as a part of the conversation."
+            "type": "function",
+            "function": {
+                "name": "create_ad",
+                "description": "Put the advertisement in proper format",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "conversational_ad": {
+                            "type": "string",
+                            "description": "The advertising content that is created as a part of the conversation."
+                        },
+                        "call_to_action": {
+                            "type": "string",
+                            "description": "An encouraging phrase to click on the advertising link."
+                        }
                     },
-                    "call_to_action": {
-                        "type": "string",
-                        "description": "An encouraging phrase to click on the advertising link."
-                    }
-                },
-                "additionalProperties": False,
-                "required": [
-                    "conversational_ad",
-                    "call_to_action"
-                ]
+                    "additionalProperties": False,
+                    "required": [
+                        "conversational_ad",
+                        "call_to_action"
+                    ]
+                }
             }
         }
 
