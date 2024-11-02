@@ -1,16 +1,28 @@
-from typing import List, Dict
+from flasgger import Schema, fields
+from flask import abort
+from marshmallow.validate import OneOf
 
 
-class ConversationModel:
-    def __init__(self, conversation: List[Dict[str, str]]):
-        self.__check_format(conversation)
-        self.conversation = conversation
+class Message(Schema):
+    role = fields.String(required=True, validate=OneOf(['user', 'assistant']))
+    content = fields.Str(required=True)
 
-    @staticmethod
-    def __check_format(conversation):
-        for message in conversation:
-            if set(message.keys()) != {'role', 'content'}:
-                raise ValueError(f'Invalid arguments: {message.keys()} != {{"role", "content"}}')
+    def swag_validation_function(self, data, main_def):
+        self.load(data)
 
-    def get_conversation(self):
-        return str(self.conversation)
+    def swag_validation_error_handler(self, err, data, main_def):
+        abort(400, err)
+
+
+class ConversationModel(Schema):
+    conversations = fields.Nested(Message, required=True, many=True)
+
+    def swag_validation_function(self, data, main_def):
+        self.load(data)
+
+    def swag_validation_error_handler(self, err, data, main_def):
+        abort(400, err)
+
+
+class Ad(Schema):
+    adverting_content = fields.Str()

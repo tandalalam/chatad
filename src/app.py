@@ -8,6 +8,8 @@ from configs.configs import ConfigManager
 import pandas as pd
 import json
 import numpy as np
+from flasgger import Swagger
+from models.conversation_model import ConversationModel
 
 if not os.path.exists('logs/'):
     os.mkdir('logs/')
@@ -39,17 +41,24 @@ openai_helper = OpenAIHelper(openai_configs=openai_configs,
 ad_controller = AdController(docs=docs,
                              openai_helper=openai_helper)
 
+swag = {"swag": True,
+        "tags": ["demo"],
+        "responses": {200: {"description": "Success request"},
+                      204: {"description": "Ad Not found"},
+                      400: {"description": "Validation error"}}}
+Swagger(app)
 
-@app.route('/get_ad', methods=['POST'])
-def get_ad_for_conversation():
+
+@app.route('/api/get_ad', methods=['POST'], **swag)
+def get_ad_for_conversation(body: ConversationModel):
     data = request.json
-    conversation = data.get('conversation', '')
+    conversation = data.get('conversations', '')
 
     try:
         ad = ad_controller(conversation)
     except Exception as e:
         logging.error(e)
-        ad = None
+        raise e
 
     if ad:
         return jsonify({"status": "success", "ad": ad}), 200
