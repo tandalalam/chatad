@@ -1,6 +1,5 @@
-import logging
 import os
-
+from loguru import logger
 from flask import Flask, request, jsonify
 from controllers.openai_helper import OpenAIHelper
 from controllers.ad_controller import AdController
@@ -13,7 +12,9 @@ from models.conversation_model import ConversationModel
 
 if not os.path.exists('logs/'):
     os.mkdir('logs/')
-logging.basicConfig(filename='logs/app.log', encoding='utf-8', level=logging.DEBUG)
+
+log_level = "DEBUG"
+logger.add("logs/app.log", level=log_level, backtrace=True, )
 app = Flask(__name__)
 
 docs = pd.read_csv('files/ads_detail_embedding.csv')
@@ -59,7 +60,7 @@ def get_ad_for_conversation(body: ConversationModel):
     try:
         ad = ad_controller(conversation)
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
         raise e
 
     if ad:
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     port = ConfigManager.get_config_manager().get_prop('service_configs').get('port')
     from waitress import serve
 
-    logging.info('Starting metric server.')
+    logger.info('Starting metric server.')
     serve(app, host='0.0.0.0',
           port=port,
           threads=5)

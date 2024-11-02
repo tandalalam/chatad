@@ -1,6 +1,5 @@
 from controllers.openai_helper import OpenAIHelper
 
-
 class AdController:
     ad_controller = None
 
