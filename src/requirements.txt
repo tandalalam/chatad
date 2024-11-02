@@ -5,6 +5,6 @@ openai
 scikit-learn
 PyYaml
 waitress
-flassger
+flasgger
 marshmallow
 apispec
