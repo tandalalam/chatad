@@ -149,4 +149,4 @@ class OpenAIHelper:
         response = self.metis_client.chat.completions.create(**data).choices[0].message.content
         logger.info(response)
         regex = r'\{\n?  \"classification\": (\d)\n?\}'
-        return int(re.match(regex, response).group(1))
+        return int(re.search(regex, response).group(1))
