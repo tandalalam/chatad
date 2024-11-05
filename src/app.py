@@ -31,7 +31,7 @@ instructions = dict(
 )
 
 models = dict(
-    binary_classification_model='gpt-3.5-turbo-0125',
+    binary_classification_model='gpt-4o',
     keywords_from_conversation_model='gpt-3.5-turbo-0125',
     advertising_content_model='gpt-4o',
     embedding_model='text-embedding-3-large',
